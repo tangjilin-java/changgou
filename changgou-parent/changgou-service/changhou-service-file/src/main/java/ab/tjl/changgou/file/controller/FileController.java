@@ -1,7 +1,7 @@
 package ab.tjl.changgou.file.controller;
 
+import ab.tjl.changgou.file.util.FastDFSClient;
 import ab.tjl.changgou.file.util.FastDFSFile;
-import ab.tjl.changgou.file.util.FastDFSUtil;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.util.StringUtils;
@@ -26,19 +26,37 @@ public class FileController {
      * @return
      * @throws Exception
      */
-    @PostMapping
-    public Result upload(@RequestParam(value = "file")MultipartFile file) throws Exception {
-        //封装文件信息
-        FastDFSFile fastDFSFile = new FastDFSFile(
-                file.getOriginalFilename(),//文件名
-                file.getBytes(),//文件字节数组
-                StringUtils.getFilenameExtension(file.getOriginalFilename())//获取文件扩展名
-        );
-        //调用FastDFSFile类将文件传入到FastDFS中
-        String[] uploads = FastDFSUtil.upload(fastDFSFile);
+    @PostMapping("/upload")
+    public Result uploadFile(MultipartFile file){
+        try{
+            //判断文件是否存在
+            if (file == null){
+                throw new RuntimeException("文件不存在");
+            }
+            //获取文件的完整名称
+            String originalFilename = file.getOriginalFilename();
+            if (StringUtils.isEmpty(originalFilename)){
+                throw new RuntimeException("文件不存在");
+            }
 
-        //拼接访问地址 URL=http://192.168.211.132:8080/group1/M00/00/00/andiu.jpg
-        String url = "http://192.168.211.132:8080/"+uploads[0]+"/"+uploads[1];
-        return new Result(true, StatusCode.OK,"上传成功！",url);
+            //获取文件的扩展名称  abc.jpg   jpg
+            String extName = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+
+            //获取文件内容
+            byte[] content = file.getBytes();
+
+            //创建文件上传的封装实体类
+            FastDFSFile fastDFSFile = new FastDFSFile(originalFilename,content,extName);
+
+            //基于工具类进行文件上传,并接受返回参数  String[]
+            String[] uploadResult = FastDFSClient.upload(fastDFSFile);
+
+            //封装返回结果
+            String url = FastDFSClient.getTrackerUrl()+uploadResult[0]+"/"+uploadResult[1];
+            return new Result(true,StatusCode.OK,"文件上传成功",url);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new Result(false, StatusCode.ERROR,"文件上传失败");
     }
 }
