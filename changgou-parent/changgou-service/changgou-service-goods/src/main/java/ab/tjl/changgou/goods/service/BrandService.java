@@ -2,20 +2,25 @@ package ab.tjl.changgou.goods.service;
 
 import ab.tjl.changgou.goods.pojo.Brand;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.auth.In;
 
 import java.util.List;
 
-/**
- * @Author:TangJiLin
- * @Description:品牌业务层接口
- * @Date: Created in 2020/2/15 14:52
- * @Modified By:
- */
+/****
+ * @Author:shenkunlin
+ * @Description:Brand业务层接口
+ * @Date 2019/6/14 0:16
+ *****/
 public interface BrandService {
 
+    /**
+     * 根据分类id查询品牌
+     * @param categoryId
+     * @return
+     */
+    List<Brand> findByCategory(Integer categoryId);
+
     /***
-     * 多条件分页查询
+     * Brand多条件分页查询
      * @param brand
      * @param page
      * @param size
@@ -24,47 +29,47 @@ public interface BrandService {
     PageInfo<Brand> findPage(Brand brand, int page, int size);
 
     /***
-     * 分页查询
+     * Brand分页查询
      * @param page
      * @param size
      * @return
      */
-    PageInfo<Brand> findPage(int page,int size);
+    PageInfo<Brand> findPage(int page, int size);
 
     /***
-     * 多条件搜索品牌方法
+     * Brand多条件搜索方法
      * @param brand
      * @return
      */
     List<Brand> findList(Brand brand);
 
-    /**
-     * 根据id删除品牌
+    /***
+     * 删除Brand
      * @param id
      */
     void delete(Integer id);
 
-    /**
-     * 根据id修改品牌数据
+    /***
+     * 修改Brand数据
      * @param brand
      */
     void update(Brand brand);
 
-    /**
-     * 增加品牌
+    /***
+     * 新增Brand
      * @param brand
      */
     void add(Brand brand);
 
     /**
-     * 通过id查询品牌
+     * 根据ID查询Brand
      * @param id
      * @return
      */
-    Brand findById(Integer id);
+     Brand findById(Integer id);
 
-    /**
-     * 查询所有品牌
+    /***
+     * 查询所有Brand
      * @return
      */
     List<Brand> findAll();

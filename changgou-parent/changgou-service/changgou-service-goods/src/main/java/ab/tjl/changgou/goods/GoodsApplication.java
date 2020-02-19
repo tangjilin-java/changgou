@@ -1,5 +1,6 @@
 package ab.tjl.changgou.goods;
 
+import entity.IdWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -17,5 +18,13 @@ import tk.mybatis.spring.annotation.MapperScan;
 public class GoodsApplication {
     public static void main(String[] args) {
         SpringApplication.run(GoodsApplication.class);
+    }
+
+    /**
+     * IdWork
+     * @return
+     */
+    public IdWorker idWorker(){
+        return new IdWorker(0,0);
     }
 }
